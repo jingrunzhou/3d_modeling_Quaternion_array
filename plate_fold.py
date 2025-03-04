@@ -21,7 +21,9 @@ def main(ID, root_path):
     camera_Principles.cam_num_plates = 4  # 0#4
     # camera_Principles.hPixel_real, camera_Principles.wPixel_real = 1000,1000#960,1280
     camera_Principles.init_jr()
+
     camera_Principles.root_path = root_path
+
     result_path = root_path + '_result_fold'
     result_path_label = root_path + '_label'
     del_path = result_path+ '_del'
@@ -112,8 +114,11 @@ def main(ID, root_path):
         points_plate_fold_ori = points_plate_fold.copy()
         # img_mark,plates_dict = camera_Principles.mark_4point(points_4d)
         result_img_plate,plates_dict = camera_Principles.mark_4point(points_4d,result_img_plate,flag_only_plates_dict=True)
+
         plates_id_arr = np.zeros_like(np_predict, dtype=np.int32)
+
         plates_border2 = {}
+        
         for key, value in plates_dict.items():
             # print(f"Key: {key}, Value: {value}")
             value_ = np.array(value.copy(),dtype=np.int32).reshape((-1, 1, 2))
@@ -132,9 +137,13 @@ def main(ID, root_path):
         print('plates_border2',plates_border2)
         # plates_border = {}
         # for key, value in plates_border2.items():
+
+        
         # print('np_predict',np_predict)
         print('points_plate_fold',len(points_plate_fold))
+
         plate_fold_arr = np.zeros_like(np_predict, dtype=int)
+
         if len(points_plate_fold)>0:
             if abs(Pan)<20:
                 B_point = None if points_plate_fold[-1][0]>=camera_Principles.wPixel_real else [camera_Principles.wPixel_real,points_plate_fold[-1][1]]
@@ -228,11 +237,14 @@ def main(ID, root_path):
                                 print(f"出现最多的非零元素是: {most_frequent_value}, 出现次数: {most_frequent_count}")
                                 plate_id = most_frequent_value-50
                             else:
+
                                 # 转换为 n*2 的形状
                                 plate_reshaped = plate.copy().reshape(-1, 2)
+
                                 # 计算 x 坐标的最大值和最小值
                                 x_max = np.max(plate_reshaped[:, 0])
                                 x_min = np.min(plate_reshaped[:, 0])
+                                
                                 if Pan<0:
                                     for i in range(10,-11,-1):
                                         if i in plates_border2.keys():
@@ -250,12 +262,18 @@ def main(ID, root_path):
                                     plate_id -=1
                                 else:
                                     plate_id +=1
+
                             print(plate_id,'未折叠')
+
+                        
                             un_fold_plate_id.append(plate_id)
+                            
                             # cv2.fillPoly(result_img_plate, [plate], (0,0,255))
                             # cv2.fillPoly(result_img_plate, [plate], camera_Principles.colour_dict27[5])
                             cv2.fillPoly(result_img_plate, [plate], (0,0,100))
+
                             numbers = int(''.join(char for char in ID if char.isdigit()))
+
                             text = f'#{str(numbers+plate_id)}Warn!!'
                             # 获取文本的宽度和高度
                             (text_width, text_height), baseline = cv2.getTextSize(text, font, font_scale,font_thickness)
@@ -296,6 +314,8 @@ def main(ID, root_path):
         video.write(img_result)
 
     del camera_Principles
+
+
 if __name__ == '__main__':
     if platform.system() == 'Linux':
         # input = r'/data/ins/dataset/test/img0705'
@@ -327,8 +347,8 @@ if __name__ == '__main__':
     # IDs = [103,118,999]
     IDs = ['dhz33',44,68]
     
-    
-    
+
+
     if True:
         for ID in IDs:
             # # 创建子进程

@@ -680,10 +680,10 @@ class Camera_Principles():
                     if self.point_cheak(p1, self.wPixel_real, self.hPixel_real) and self.point_cheak(p2,self.wPixel_real,self.hPixel_real):
                         cv2.line(img_mark, tuple(p1), tuple(p2), colour, 2)
         return img_mark
-    def Filter_points(self,points,wPixel_real, hPixel_real):
+    def Filter_points(self,points,wPixel_real, hPixel_real,k=0.5):
         new_points = []
         for p in points:
-            if self.point_cheak(p, wPixel_real, hPixel_real):
+            if self.point_cheak(p, wPixel_real, hPixel_real,k):
                 new_points.append(p)
         return new_points
     # 需要转
@@ -770,7 +770,7 @@ class Camera_Principles():
             points_line = self.World_pixel_siyuan(self.transmissionBelts_Word, Tilt, Pan,wPixel_real, hPixel_real)
             # 需要转
             points_boundary = self.World_pixel_siyuan(self.boundaries_Word, Tilt, Pan,wPixel_real, hPixel_real )
-        points_plate_fold = self.Filter_points(points_plate_fold,wPixel_real, hPixel_real)
+        points_plate_fold = self.Filter_points(points_plate_fold,wPixel_real, hPixel_real,k=0.3)
         return points_4d,points_plate_fold,points_line,points_boundary
     def World_pixel_siyuan(self, points,Tilt, Pan,wPixel_real, hPixel_real,flag_filter = True):
         camera = QuaternionCamera()
