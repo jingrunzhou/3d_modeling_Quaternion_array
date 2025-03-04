@@ -89,8 +89,7 @@ def verify_centering():
     
     return result
 
-# 执行验证
-result = verify_centering()
+
 
 # 定义一个函数来模拟点的动态移动
 def simulate_point_movement():
@@ -113,6 +112,8 @@ def simulate_point_movement():
         print(f"需要的相机角度: Yaw={result['camera_angles'][0]:.2f}°, Pitch={result['camera_angles'][1]:.2f}°")
     
     return results
-
-# 模拟点的移动
-movement_results = simulate_point_movement()
+if __name__ == "__main__":
+    # 执行验证
+    result = verify_centering()
+    # 模拟点的移动
+    movement_results = simulate_point_movement()

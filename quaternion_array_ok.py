@@ -1,5 +1,3 @@
-
-import numpy as np
 from math import sin, cos, sqrt, pi
 import numpy as np
 # from jibianjiaozhen import ImprovedCameraPositioner
@@ -60,12 +58,6 @@ class Quaternion:
             [    2*xz - 2*wy,     2*yz + 2*wx, 1 - 2*x2 - 2*y2]
         ])
 
-
-
-
-
-
-
 class QuaternionCamera:
     def __init__(self):
         self.position = np.array([0.0, 0.0, 5.0])  # 相机位置
@@ -124,12 +116,6 @@ class ViewTransform:
         """
         创建视口变换矩阵
         """
-        # return np.array([
-        #     [self.width/2, 0, 0, self.width/2],
-        #     [0, -self.height/2, 0, self.height/2],
-        #     [0, 0, 1, 0],
-        #     [0, 0, 0, 1]
-        # ])
     
         return np.array([
             [self.width/2, 0, 0, self.width/2],
@@ -137,8 +123,6 @@ class ViewTransform:
             [0, 0, 1, 0],
             [0, 0, 0, 1]
         ])
-
-
 def transform_point_to_screen(point, camera, view_transform,flag_filter = True):
     """
     将3D点转换到屏幕空间
@@ -146,59 +130,32 @@ def transform_point_to_screen(point, camera, view_transform,flag_filter = True):
     flag_ok = True
     # 转换为齐次坐标
     point_h = np.append(point, 1.0)
-    
     # 1. 视图变换：世界空间 -> 视图空间
     view = np.dot(camera.view_matrix(), point_h)
-    
     # 2. 投影变换：视图空间 -> 裁剪空间
     clip = np.dot(view_transform.perspective_matrix(), view)
-    
     # 3. 透视除法：裁剪空间 -> 标准化设备坐标(NDC)
     ndc = clip / clip[3]
     if clip[3]<=1000:
         flag_ok = False
-
-
     if False:#old
         # 4. 视口变换：NDC -> 屏幕空间
         screen = np.dot(view_transform.viewport_matrix(), ndc)
-
     elif True:
-        if False:
-            positioner = ImprovedCameraPositioner()
-            # 3.1 应用畸变
-            distorted = positioner.distortion.apply_distortion(normalized.reshape(1, 2))
-            # 4. 应用相机内参
-            pixel_coords = np.dot(positioner.distortion.camera_matrix, 
-                                np.append(distorted[0], 1))[:2]
-        
-        else:
-
+        if True:
             if (ndc[:2]*ndc[:2]).max()>2:
                 flag_ok = False
-            # screen_ori = np.dot(view_transform.viewport_matrix(), ndc)
-            # ndc_old= ndc.copy()
-            
              # 3.1 应用畸变
             cameraDistortion_f = CameraDistortion_f()
             ndc[:2] = cameraDistortion_f.apply_distortion(ndc.reshape(1,4))
-
             # 4. 视口变换：NDC -> 屏幕空间
             screen = np.dot(view_transform.viewport_matrix(), ndc)
-
             # print(f'120ndc_old{ndc_old[:2]},ndc,{ndc[:2]},screen_ori:{screen_ori[:2]},screen:{screen[:2]}')
-
-    
-
-    
 
     if flag_ok or not flag_filter:
         return screen[:2]  # 返回屏幕坐标(x,y)
     else:
         return [np.int16(-32768), np.int16(-32768)]
-
-
-
 
 def main():
     # 创建相机和视口转换器
@@ -215,11 +172,7 @@ def main():
         np.array([z0, 0, z0]),    
         np.array([0, z0, z0]), 
         np.array([z0, z0, z0]), 
-
     ]
-    
-
-
     # 存储不同视角下点的屏幕坐标
     screen_positions = []
     
@@ -229,8 +182,7 @@ def main():
         (30, 0),     # 向右旋转30度
         (30, 20),    # 向右30度，向上20度
         (-45, -10),  # 向左45度，向下10度
-
-
+        
         (0, 0),      # 初始视角
         (45, 0),      # 初始视角
         (0, 45),     # 向右旋转30度
