@@ -994,8 +994,6 @@ class Camera_Principles():
         for i in range(len(names)):
             print(names[i], ' : ', args[i + 1])
 
-
-
     def main(self, root_path):
         # self.cam_num_transmissionBelts = 4 #12# 30#10#4 #100
         self.cam_num_transmissionBelts = 10  # 6#10
@@ -1029,9 +1027,6 @@ class Camera_Principles():
         
         # 使用sorted函数按照文件名排序
         sorted_files_and_dirs = sorted(img_paths)
-
-        # 输出排序后的列表
-
 
         # 输出排序后的列表
         for name in sorted_files_and_dirs:
