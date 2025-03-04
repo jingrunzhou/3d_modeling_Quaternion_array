@@ -544,7 +544,6 @@ class Camera_Principles():
         up_y = 50
         low_y = 100
 
-        # self.hPixel_real ,w_pixel,_ = img_mark.shape
         points = []
 
         plates_dict = {}
