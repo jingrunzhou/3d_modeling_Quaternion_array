@@ -16,6 +16,22 @@ class Euler():
         self.dist = dist
         self.k1, self.k2, self.p1, self.p2, self.k3 = self.dist
 
+    def tan_jr_degrees(self, degrees):
+            # 将角度转换为弧度
+        radians = math.radians(degrees)
+        # 计算正切值
+        tan_jr_degreesgent_value = math.tan(radians)
+        # print(degrees,'tan_jr_degreesgent_value',tan_jr_degreesgent_value)
+        return tan_jr_degreesgent_value
+
+    def cos_jr_degrees(self, degrees):
+        # 将角度转换为弧度
+        radians = math.radians(degrees)
+        # 计算余弦
+        cos_jr_degreesgent_value = math.cos(radians)
+        # print(degrees,'cos_jr_degreesgent_value',cos_jr_degreesgent_value)
+        return cos_jr_degreesgent_value
+
 
     def rotation_matrix_x(self, angle_radians):
         """

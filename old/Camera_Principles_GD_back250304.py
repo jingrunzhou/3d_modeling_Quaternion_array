@@ -989,6 +989,25 @@ class Camera_Principles():
         return loss
 
 
+    def run_jr(self, Tilt, Pan, image1, mat_intri, coff_dis):
+        # self.RT_count(Tilt, Pan)
+        img_mark = image1
+        if True:
+            objectPoints = np.array(self.plates_Word)  # 世界坐标系中的 3D 点
+            rotationMatrix = self.R_3x3  # 描述：旋转矩阵，直接表示从世界坐标系到相机坐标系的旋转。
+            tvec = self.t.astype(np.float32)  # 平移向量，表示从世界坐标系到相机坐标系的平移。
+            cameraMatrix = mat_intri  # 相机内参矩阵，通常包含焦距 fx, fy（以像素为单位）和主点坐标 cx, cy（图像中心的坐标）。
+            distCoeffs = coff_dis.astype(np.float32)  # 畸变系数，一个 1x5、1x8 或 1x12 的数组。这些系数表示径向畸变（k1, k2, k3）和切向畸变（p1, p2, k4, k5, k6）。如果为 None，则不考虑畸变。
+            points_pixel_repro, _ = cv2.projectPoints(objectPoints, rotationMatrix, tvec, cameraMatrix, distCoeffs)
+            # imagePoints 现在包含了投影后的 2D 点
+            imagePoints = points_pixel_repro.squeeze()  # 如果需要，将形状从(N, 1, 2)压缩到(N, 2)
+            points = np.round(imagePoints).astype(np.int16)
+
+        img_mark = self.mark(points, img_mark)
+        # img_mark = self.mark(self.image_points_measure, img_mark)
+        # cv2.imwrite('./3.jpg',img_mark)
+        return img_mark
+
     def print_jr(self, *args):
         names = args[0].split(',')
         for i in range(len(names)):
@@ -1175,8 +1194,8 @@ class Camera_Principles():
 
         t_temp = time.time()
 
-        # 这里替换为误差计算逻辑
-        # 假设 calculate_error 是计算误差的函数
+        # 这里替换为你的误差计算逻辑
+        # 假设 calculate_error 是你计算误差的函数
         error = self.calculate_error()
         print('单次花费时间：', time.time() - t_temp)
         return error
