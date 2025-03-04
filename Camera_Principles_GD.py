@@ -747,12 +747,7 @@ class Camera_Principles():
                     cv2.line(img_mark, tuple(p1), tuple(p2), colour, 2)
                     new_points_index.add(i)
                     new_points_index.add(i+1)
-                    # new_points.update(i,i+1)
-                    # for p in [p1,p2]:
-                    #     if p not in new_points:
-                    #         new_points.append(p)
-        # new_points_index = sorted(new_points_index)
-        # new_points = [points[i] for i in new_points_index]
+
         return img_mark
 
 
@@ -900,7 +895,6 @@ class Camera_Principles():
         第二个参数 左右转（绕着y轴转）  单位：角度  该值为相对值，正对煤比为0，以左为-，以右为+
         '''
         Pan = -Pan
-        
         # Tilt = 0
         # Pan = 0
 
@@ -926,8 +920,6 @@ class Camera_Principles():
             else:#ok
                 self.RT = self.evler.RT_count3(Tilt + self._T_constant_camera, Pan)
                 self.RT_support = self.evler.RT_count3(Tilt + self._T_constant_support + self._T_constant_camera, Pan)
-
-
 
 
 
@@ -1006,14 +998,7 @@ class Camera_Principles():
         return screen_positions
 
 
-        # # camera.rotate(yaw, pitch)
-        # camera.rotate(Pan,Tilt)
-        # screen_points = []
-        # for point in points:
-        #     screen_point = transform_point_to_screen(point, camera, view_transform)
-        #     screen_points.append(screen_point)
-        #     print(f"3D点 {point} 在屏幕上的坐标: {screen_point}")
-        # return screen_points
+
 
 
     def count_loss(self, loss_name_path=None):
@@ -1141,12 +1126,7 @@ class Camera_Principles():
 
             if str(self.ID) != str(ID):
                 continue
-            # elif abs(abs(Pan) - 90 )>10:
-            #     continue
-            # elif abs(Pan) > 25:
-            #     continue
-            # elif abs(Pan) < 50 or abs(Pan) > 130:
-            #     continue
+
 
             image1 = cv2.imread(os.path.join(root_path, name))
             self.hPixel_real, self.wPixel_real, _ = image1.shape
@@ -1235,13 +1215,6 @@ class Camera_Principles():
             if str(self.ID) != str(ID):
                 continue
 
-            # if abs(Pan) > 25 and 'plates' in self.flag_calculation_depends and len(self.flag_calculation_depends)==1:
-            #     continue
-
-            # if abs(Pan) < 50 or abs(Pan) > 130:
-            #     continue
-            # elif abs(Pan) > 130:
-            #     continue
 
             # predict_npy_path = os.path.join(root_path, name.split('.')[0] + '_predict_solo.npy')
             predict_npy_path = os.path.join(root_path, name.split('.')[0] + '_predict.npy')
@@ -1357,11 +1330,6 @@ class Camera_Principles():
         np.save(self.name_initial_guess, guess)  # 保存文件
         print(f'#{self.ID}保存参数成功')
 
-
-    # def resolution_conversion(self, points):
-    #     points[:, 0] *= self.wPixel_real / self.wPixel_referenc
-    #     points[:, 1] *= self.hPixel_real / self.hPixel_referenc
-    #     return points
 
     def point_Calculate_angle(self, point):
         x, y, z = point
